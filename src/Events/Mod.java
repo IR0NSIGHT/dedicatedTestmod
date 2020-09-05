@@ -1,10 +1,7 @@
-import api.DebugFile;
-import api.common.GameClient;
-import api.listener.Listener;
-import api.listener.events.player.PlayerSpawnEvent;
-import api.mod.StarLoader;
-import api.mod.StarMod;
+package Events;
 
+import api.DebugFile;
+import api.mod.StarMod;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
