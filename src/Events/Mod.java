@@ -1,5 +1,6 @@
 package Events;
 
+import Explorer.DerelictController;
 import api.DebugFile;
 import api.mod.StarMod;
 import java.text.SimpleDateFormat;
@@ -12,6 +13,7 @@ import java.util.Date;
  * TIME: 20:01
  */
 public class Mod extends StarMod {
+    public DerelictController dc;
     public static void main(String[] args) {
     }
     @Override
@@ -21,6 +23,7 @@ public class Mod extends StarMod {
         setModName("testmode dedicated");
         setModVersion("0.1");
         this.forceEnable = true;
+   //     this.flagEnabled(true); //last edit: added !!THIS WILL BREAK THE MOD
     }
 
     @Override
@@ -34,7 +37,7 @@ public class Mod extends StarMod {
         SimpleDateFormat formatter = new SimpleDateFormat ("dd-MM-yyyy 'at' HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
         String timeStamp = formatter.format(date);
-        DebugFile.log((timeStamp + " -- TESTMOD FOR DEDICATED -- " + s), this);
+        DebugFile.log(timeStamp + " -- TESTMOD FOR DEDICATED -- " + s);
     }
 
 }

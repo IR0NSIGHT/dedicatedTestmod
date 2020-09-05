@@ -44,6 +44,7 @@ public class ServerCheck {
                     if (GameClient.getClientState() == null) {
                         instance.ChatDebug("client state is null ---------> dedicated server");
                         SecondLoop();
+                        instance.ChatDebug("creating second loop");
                     } else {
                         instance.ChatDebug("client state is not null ----> client");
 
@@ -70,27 +71,24 @@ public class ServerCheck {
             @Override
             public void run() {
                 if (ServerState.isShutdown() || ServerState.isFlagShutdown()) {
+                    instance.ChatDebug("second loop was canceled");
                     cancel();
                 }
                 if (eventLoop == null) {
-                   // eventLoop = new EntityLoadEventLoop(instance);
+                    eventLoop = new EntityLoadEventLoop(instance);
+                    instance.ChatDebug("creating eventloop");
                 }
-                //if (instance.dc == null) {
-                   // instance.dc = new DerelictController(instance); //create the class that controls the derelict station stuff -> loot filling etc
-                //}
+                if (instance.dc == null && eventLoop != null) {
+                    instance.dc = new DerelictController(instance); //create the class that controls the derelict station stuff -> loot filling etc
+                    instance.ChatDebug("creating derelict controller");
+                }
                 //ChatDebug("running from the server");
-                ModPlayground.broadcastMessage("im running");
-                ChatDebug("im running");
+                //ModPlayground.broadcastMessage("im running");
+                instance.ChatDebug("second loop is running");
             }
         }.runTimer(25 * 5);
     }
 
-    private void ChatDebug(String s) {
-        SimpleDateFormat formatter = new SimpleDateFormat ("dd-MM-yyyy 'at' HH:mm:ss z");
-        Date date = new Date(System.currentTimeMillis());
-        String timeStamp = formatter.format(date);
-        ModPlayground.broadcastMessage(timeStamp + "-----" + s);
-    }
     private void DebugNow() {
         if (GameServer.getServerState() == null) {
             instance.ChatDebug(("Server state is null"));
