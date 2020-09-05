@@ -75,9 +75,9 @@ public class ServerCheck {
                 if (eventLoop == null) {
                    // eventLoop = new EntityLoadEventLoop(instance);
                 }
-                if (instance.dc == null) {
+                //if (instance.dc == null) {
                    // instance.dc = new DerelictController(instance); //create the class that controls the derelict station stuff -> loot filling etc
-                }
+                //}
                 //ChatDebug("running from the server");
                 ModPlayground.broadcastMessage("im running");
                 ChatDebug("im running");
