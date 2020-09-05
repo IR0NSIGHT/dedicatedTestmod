@@ -1,5 +1,6 @@
 package Events;
 
+import Explorer.DerelictController;
 import api.ModPlayground;
 import api.common.GameClient;
 import api.common.GameServer;
@@ -24,6 +25,7 @@ public class ServerCheck {
      */
     private final Mod instance;
     private EntityLoadEventLoop eventLoop;
+
     public ServerCheck(Mod instance) {
         this.instance = instance;
         instance.ChatDebug("server check loop created");
@@ -37,7 +39,7 @@ public class ServerCheck {
         new StarRunnable() {
             @Override
             public void run() {
-                instance.ChatDebug("Check loop iterating");
+                //instance.ChatDebug("Check loop iterating");
                 if (GameServer.getServerState() != null) { //wait until server was created, otherwise everything is null
                     if (GameClient.getClientState() == null) {
                         instance.ChatDebug("client state is null ---------> dedicated server");
@@ -71,9 +73,14 @@ public class ServerCheck {
                     cancel();
                 }
                 if (eventLoop == null) {
-                    eventLoop = new EntityLoadEventLoop(instance);
+                   // eventLoop = new EntityLoadEventLoop(instance);
+                }
+                if (instance.dc == null) {
+                   // instance.dc = new DerelictController(instance); //create the class that controls the derelict station stuff -> loot filling etc
                 }
                 //ChatDebug("running from the server");
+                ModPlayground.broadcastMessage("im running");
+                ChatDebug("im running");
             }
         }.runTimer(25 * 5);
     }
