@@ -84,7 +84,7 @@ public class ServerCheck {
                 }
                 //ChatDebug("running from the server");
                 //ModPlayground.broadcastMessage("im running");
-                instance.ChatDebug("second loop is running");
+                //instance.ChatDebug("second loop is running");
             }
         }.runTimer(25 * 5);
     }
