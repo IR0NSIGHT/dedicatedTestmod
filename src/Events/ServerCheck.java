@@ -36,24 +36,24 @@ public class ServerCheck {
 
 
     private void StartLoop() {
+
         new StarRunnable() {
+            boolean stop = false;
             @Override
             public void run() {
                 //instance.ChatDebug("Check loop iterating");
                 if (GameServer.getServerState() != null) { //wait until server was created, otherwise everything is null
-                    if (GameClient.getClientState() == null) {
-                        instance.ChatDebug("client state is null ---------> dedicated server");
-                        SecondLoop();
-                        instance.ChatDebug("creating second loop");
-                    } else {
-                        instance.ChatDebug("client state is not null ----> client");
-
-                    }
-                    instance.ChatDebug("killing checkloop --------------");
-                    cancel();
+                    instance.ChatDebug("server state detected");
+                    SecondLoop();
+                    stop = true;
                 }
-                if (GameClient.getClientState() != null && GameServer.getServerState() == null) {
-                    instance.ChatDebug("client state is not null ----> client");
+                if (GameClient.getClientState() != null) {
+                    instance.ChatDebug("client state detected");
+                }
+                if (GameClient.getClientState() != null && GameServer.getServerState() != null) {
+                    instance.ChatDebug("Singleplayer");
+                }
+                if(stop) {
                     cancel();
                 }
             }
@@ -61,7 +61,6 @@ public class ServerCheck {
             @Override
             public void cancel() { //start the second loop when the first one is finished (bc server is done loading)
                 instance.ChatDebug("first loop canceled");
-
                 super.cancel();
             }
         }.runTimer(25);
