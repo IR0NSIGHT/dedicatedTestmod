@@ -15,10 +15,13 @@ import org.schema.game.common.controller.elements.ManagerContainer;
 import org.schema.game.common.data.ManagedSegmentController;
 import org.schema.game.common.data.element.ElementInformation;
 import org.schema.game.common.data.element.ElementKeyMap;
+import org.schema.game.common.data.element.meta.Logbook;
+import org.schema.game.common.data.element.meta.MetaObjectManager;
 import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.player.inventory.Inventory;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.Galaxy;
+
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -37,6 +40,7 @@ public class DerelictController {
     private final Mod instance;
     private final LootController lc;
     private final ConfigReader cr;
+    private final LoreHandler lh;
     private HashMap<Integer,Integer> derelictLoot;
     private int lootAmount = 5000;
 
@@ -48,6 +52,7 @@ public class DerelictController {
         lc = new LootController(instance);
         cr = new ConfigReader(instance);
         derelictLoot = cr.ReadConfig();
+        lh = new LoreHandler(instance);
 
         StarLoader.registerListener(SegmentControllerSpawnEvent.class, new Listener<SegmentControllerSpawnEvent>() {
             @Override
@@ -96,16 +101,30 @@ public class DerelictController {
                 if (e.getMessage().text.equals("amount")) {
                     DebugLootAmount();
                 }
+                if (e.getMessage().text.equals("loreread")) {
+                    lh.ReadFile();
+                }
                 try {
                     if (player != null) {
                         ship = (SegmentController) player.getFirstControlledTransformableWOExc(); //get ship
                         if (ship != null) {
                             ModPlayground.broadcastMessage("adding to cargo");
-
-                            if (addToEntitiesCargo(ship,(short)1008, 69)) {//add to ships cargo
-                                ModPlayground.broadcastMessage("success");
-                            } else {
-                                ModPlayground.broadcastMessage("failed");
+                            if (e.getMessage().text.equals("book")) {
+                                instance.ChatDebug("received command");
+                                Inventory inv = GetRndInv(ship); //get inventory of segment controller
+                                if (inv == null) {
+                                    instance.ChatDebug("inventory is null");
+                                }
+                                instance.ChatDebug("gotten inv: capacity " + inv.getCapacity());
+                                //get free inventory slot
+                                int index = inv.getFreeSlot();
+                                instance.ChatDebug("free slot of inventory is : " + index);
+                                //add logbook
+                                AddLogbook(inv, index);
+                                inv.clientUpdate();
+                                instance.ChatDebug("added loogbook");
+                                inv.sendAll();
+                                instance.ChatDebug("sent all");
                             }
                         }
                     }
@@ -196,6 +215,51 @@ public class DerelictController {
         }
 
         instance.ChatDebug("total capacity is " + totalCap);
+    }
+    private void AddLogbook(Inventory inv, int mapidx) {
+        /**
+         *  creates a MetaObject logbook and puts it at specified index of the inventorymap into the specified inventory.
+         */
+        try {
+            instance.ChatDebug("trying to create new logbook with ID");
+            //get metaobjectmanager
+            Logbook lb = (Logbook) MetaObjectManager.instantiate(MetaObjectManager.MetaObjectType.LOG_BOOK,(short) 1,true); //var0 = type, var1 = weapon subtype (ignored if not weapon), var2 bool true => generate new ID automatically.
+          // int id = 123456789;
+          //  Logbook lb = new Logbook(id);
+            instance.ChatDebug("new logbook has ID: " + lb.getId());
+            lb.setTxt(Logbook.getRandomEntry(GameServer.getServerState())); //set random text from file
+            inv.put(mapidx,lb); //put logbook into inventory at slot !!overwrites existing slots
+
+            instance.ChatDebug("put logbook into inv");
+        }catch (Exception e) {
+            e.printStackTrace();
+            instance.ChatDebug("logbook creation failed: " + e.toString());
+        }
+        ModPlayground.broadcastMessage("done creating logbook");
+    }
+    private Inventory GetRndInv(SegmentController sc) {
+        instance.ChatDebug("trying to getrandom entities cargo: " + sc.getName());
+        try {
+            if (sc.getType() != SimpleTransformableSendableObject.EntityType.SHIP && sc.getType() != SimpleTransformableSendableObject.EntityType.SPACE_STATION) {
+                instance.ChatDebug("entity is neither ship nor station.");
+                return null;
+            }
+            ManagedSegmentController msc = (ManagedSegmentController) sc; //cast segmentcontroller into managed segmentcontroller -> get access to method for manager container
+            ManagerContainer mc = msc.getManagerContainer(); //get managercontainer
+            ObjectArrayList<Inventory> list = mc.getInventories().inventoriesList; //get all cargo inventories for that segmentcontroller
+            if (list.size() == 0) {
+                instance.ChatDebug("inventory list is zero");
+                return null;
+            }
+            instance.ChatDebug("inventories list is " + list.size());
+            int idx = (int) Math.floor(Math.random() * list.size());
+            return list.get(idx);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            instance.ChatDebug("GetRndInv failed: " + e.toString());
+        }
+        return null;
     }
     private void DebugLootAmount() {
         //cycle through 5k, 15k, 45k
