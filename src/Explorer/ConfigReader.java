@@ -38,7 +38,6 @@ public class ConfigReader {
             } catch (Exception e) {
                 instance.ChatDebug("failed getting entry set: " + e.toString());
             }
-
         }
         return list;
     }

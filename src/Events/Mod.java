@@ -13,6 +13,11 @@ import java.util.Date;
  * TIME: 20:01
  */
 public class Mod extends StarMod {
+    /**
+     *  core class of the complete mod.
+     *  Starts first loop which checks for server creation
+     *  is used to write to debug file
+     */
     public DerelictController dc;
     public static void main(String[] args) {
     }

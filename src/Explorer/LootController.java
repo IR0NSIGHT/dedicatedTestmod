@@ -10,6 +10,7 @@ import java.util.*;
  * CREATOR: Max1M
  * DATE: 07.09.2020
  * TIME: 21:15
+ *
  */
 public class LootController {
     private Mod instance;
@@ -31,6 +32,7 @@ public class LootController {
         //select random amount of slots, max is 10
         float slotAmount = (float) getRandomRange((int) (slots * 0.5), (int) (slots * 1.5)); //randomly selects from range 0.5 - 1.5 * slots
         float slotSize = totalItems/slotAmount;
+        instance.ChatDebug(slotAmount + "slots created with size " + slotSize);
         //instance.ChatDebug("slot amount is " + slotAmount);
         //instance.ChatDebug("slot size is " + slotSize);
         //put items to the slots (weighted)
@@ -64,6 +66,10 @@ public class LootController {
            // instance.ChatDebug("added item " + itemID + " with amount " + amount + " to loot list");
         }
       //  instance.ChatDebug("loot list returned " + loot);
+        instance.ChatDebug("loot list (itemID, amount) is: ");
+        for (Map.Entry<Integer,Integer> entry: loot.entrySet()) {
+            instance.ChatDebug("item " + entry.getKey() + " amount " + entry.getValue());
+        }
         return loot;
     }
     private List<LootItem> GetWeighted(HashMap <Integer, Integer> weightedList) {
@@ -96,15 +102,5 @@ public class LootController {
     }
     public int getRandomRange (int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
-    }
-}
-class LootItem {
-    public int ID;
-    public int rangeMin;
-    public int rangeMax;
-    public LootItem(int ID, int min, int max) {
-        this.ID = ID;
-        this.rangeMin = min;
-        this.rangeMax = max;
     }
 }

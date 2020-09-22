@@ -1,5 +1,187 @@
-{
-  "text": "this is text",
-  "factionIDList": [-1,0,10001],
-  "entityTypeList": [0,1,2]
-}
+[
+  {
+    "text": "this is the text that will be displayed in the logbook. \n will be displayed as a line break. this string can be 99 lines at max and 512 characters at max. If it is above these limits, it will be ignored.",
+    "factionIDList": [
+      1,
+      2,
+      3
+    ],
+    "entityTypeList": [
+      5,
+      6,
+      7
+    ]
+  },
+  {
+    "text": "[FILE CORRUPTED] /¼ð‚P[UNREADABLE]{síµˆ´¸]­‡¦4¹p,UÞµ>T?anmissionreceivedbÁ”ím*Ó®@[UNREADABLE]Y°Î¯õ äSSURRENDERSHIPä5ŽóåÃ?Œ¾ÃõÏœ9S¸|ù² õâíf¿Aff[UNREADABLE]&ÚÿÜ¹eactorfailinsÂí·ßîèï¯×GY@˜ÊjOvýÁmGº5 SOS Þð SOS ×Ch³>Y[END OF FILE]",
+    "factionIDList": [
+      0,
+      -1,
+      -2
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": " XXX EMPIRE \n - we make your dreams come true! come down to XXX Empire. \n Beautiful ladies, tasty drinks and questionable morals all inclusive. \n now available in every major starcluster! \n \n \n Visitors must be 18 years or older. \n If you are interested in becoming a staffmember inquire with our chief space-trucker pleaser NutManatee.",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      2
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": "Personal log:\nI can’t breathe. I haven’t seen any sign of life around here, and it’s been days. I can see my wife in front of me, I’ve been calling to her for minutes, screaming her name. Dear god Cora, please don’... *~*}€^~^}[corrupt]€~*}*}*{.%~¥ ",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": "Personal Log: Hans Guckindieluft \n Doctor Duncan finally cleared me for active duty after that girder went through my leg during the last raid; I tell you, its terrifying to think, if I hadn’t been rushed to the doc, I’d be dead ",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": " Personal log: [name] \nThe weapons system was hit badly in the last attack, the captain wants them up and running in less than 12 hours, I don’t know what to tell her; I’m an engineer, not a miracle worker. \nWorst comes to it, she’ll have to make do with a single missile tube and firing cook’s fried chicken out the airlock.",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": " Personal log: [name] \nThere’s a fault in the main computer core again, every time a primary command is input, it’s response is to order ‘Fish Fingers and a side of fries’ from the food processors, we’ve been adrift in deep space for weeks now, drowning in fish fingers and soggy, salty fries.",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },  {
+  "text": "Automated ship log\nTimestamp 1406\nShip AI has detected malfunction on rescue pod 3 \nSending human engineer to rescue pod 3\nAssigning repair task to Engineer David Bowman\nTimestamp 1418\nAirlock on deck 1 activated\nEngineer David Bowman entered rescue pod 3\nTimestamp 1420\nDenied activation of airlock on deck 1 to Engineer David Bowman\nTransmission logged - “Open the pod bay doors, ship.”\nTransmission logged - “Im sorry Dave. Im afraid I can’t do that.”\nRescue pod 3 was decoupled\nEnd of automated ship log",
+  "factionIDList": [
+    0,
+    -1,
+    -10000000
+  ],
+  "entityTypeList": [
+    0
+  ]
+},  {
+  "text": "EMERGENCY TRANSMISSION: CAPT. R. Davvis\nTO: C.O.O. Craig Mcdoolge.\n\nWHAT THE HELL HAVE YOU SENT US TO DO, YOU MANIAC. \n\nWe found your officer, CURLED UP IN A BALL CRYING FOR DEATH. \nhe had a purple rash on his hand. \non the flight back, he PUNCHED A MEDIC SO HARD HE CREATED A HULL BREACH\nA hull breach that HE WAS UNAFFECTED BY, HE JUST SAT THERE, FLOATING IN \nTHE VACCUME OF SPACE!\n[RED ALERT]\n[¶•¶∞¢ª¥¢• FILE CORR*(^T *^*^£*^£} ",
+  "factionIDList": [
+    0,
+    -1,
+    -10000000
+  ],
+  "entityTypeList": [
+    0
+  ]
+},  {
+  "text": "ORDERS FROM: Chief Operations Officer Craig Mcmoogle \nTO: Captain Rick devvis IGTG [name] \n\nThere was another 'arcangel' sighting today. came out of Jump-space infront of\nthe IGTG Columbus and blasted the ship to shreads. one shot, through the hull. \nKnocked out the centeral stock exchange computer, main reactor, and blew the \ndata relay core. there was one survivor, He's transmitting from a moon nearby your\nlocation. Go get him. but if he starts talking about them being \"gods,\" leave him to \nstarve. ",
+  "factionIDList": [
+    0,
+    -1,
+    -10000000
+  ],
+  "entityTypeList": [
+    0
+  ]
+},  {
+  "text": "Dear Susan,\nI love you, you're my wife, But that wasn't enough this time. \nEver since we'd had timmy. things had gone stale, I knew it, you knew it. \nso when the Trading guild offered me a deep space assignment, I knew I had to \ntake it. I had to let you go. I know you'll feel betrayed, and I am truly sorry. I \nknow you won't believe that, but its true. \n\nIts over, Susan ; Not because I want it to be, But because for both our sakes,\nIt has to be. \nLove,\nDoug",
+  "factionIDList": [
+    0,
+    -1,
+    -10000000
+  ],
+  "entityTypeList": [
+    0
+  ]
+},
+  {
+    "text": "Captains personal log: 20/10/2219\n\nWe were attacked today again, we'd bearly restored main reactor power. we lost \n3 more crew. good men. \n\nFortunatly our chief tactial officer thinks he has found a weakness, if we can just \n[ƒø:registered: ƒ•– ¢ FILE NOT FOUND(*$˙∫ƒ∆ƒƒ] [DATA CORRUPTED]",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": "Dear Susan,\nIn all likeliness; you'll never get the chance to read this. The [Ship name] has lost\npower and I think all the rest of the crew are dead. I've been stuck in my quarters\nfor the last 6 hours. I don't think theres much oxygen left. It's so cold, I can hardly \nfeel my fingers.\nTheres something i've got to tell you. Something I should've said before I left, but \nwas too cowardly to say anything... I had an affair. With your sister. I'm sorry. \nTell our son his Dad loves him very much. \nLove.\nDoug.",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": "**transmission start**\n**sender: ? **\n**receiver: Vorgak station **\n**message: \" We got word about the traders moving a big supply of beam weapon parts from _systemA_ towards _systemB_ within the next 3 days. Still waiting for more precise intel. Prepare ships capable of fast attack, we'll bring along a cargo hauler for the freight. Purpose of the weapon delivery is unknown, but apparently the escort is rather small. We'll get more insider info from 'Bosco' soon. Stay tuned.\"\n**encryption: 128 AES**\n**encrypting**\n**encrypting**\n**encrypting**\n**message ready**\n**charging antenna**\n**sending**\n**powering down antenna**\n**transmission end**\n",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": "Automated ship log\nTimestamp 1406\nShip AI has detected malfunction on rescue pod 3 \nSending human engineer to rescue pod 3\nAssigning repair task to Engineer David Bowman\nTimestamp 1418\nAirlock on deck 1 activated\nEngineer David Bowman entered rescue pod 3\nTimestamp 1420\nDenied activation of airlock on deck 1 to Engineer David Bowman\nTransmission logged - “Open the pod bay doors, ship.”\nTransmission logged - “Im sorry Dave. Im afraid I can’t do that.”\nRescue pod 3 was decoupled\nEnd of automated ship log\n",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  },
+  {
+    "text": "this is my cool lore text \n this is the next line",
+    "factionIDList": [
+      0,
+      -1,
+      -2,
+      -10000000
+    ],
+    "entityTypeList": [
+      0
+    ]
+  }
+
+]

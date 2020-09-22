@@ -21,10 +21,12 @@ import org.schema.game.common.data.player.PlayerState;
 import org.schema.game.common.data.player.inventory.Inventory;
 import org.schema.game.common.data.world.SimpleTransformableSendableObject;
 import org.schema.game.server.data.Galaxy;
+import org.schema.game.server.data.GameServerState;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * STARMADE MOD
@@ -62,6 +64,7 @@ public class DerelictController {
                     int fID = e.getController().getFactionId();
                     SegmentController sc = e.getController();
                     int cID = e.getController().getCreatorId();
+                    instance.ChatDebug("new sc created: " + sc.getName() + " faction: " + fID);
                     if (fID == 0 && cID == 1 && sc.getType() == SimpleTransformableSendableObject.EntityType.SPACE_STATION) {
                         ModPlayground.broadcastMessage("DERELICT STATION");
                     }
@@ -73,11 +76,10 @@ public class DerelictController {
                         new StarRunnable() {
                             @Override
                             public void run() {
+                                AddLore(segCon, null);
                                 FillEntityLoot(segCon);
                             }
                         }.runLater(50);
-
-
                     }
                     ModPlayground.broadcastMessage("creator ID is: " + cID);
                     ModPlayground.broadcastMessage(("faction ID is: " + fID));
@@ -104,27 +106,19 @@ public class DerelictController {
                 if (e.getMessage().text.equals("loreread")) {
                     lh.ReadFile();
                 }
+                if (e.getMessage().text.equals("server")) {
+                    String s = " server has universe: " + GameServer.getUniverse().getName() + "Gameserverstate path " + GameServerState.DATABASE_PATH;
+                    ModPlayground.broadcastMessage(s);
+                    instance.ChatDebug(s);
+                    //server has universe: nullGameserverstate path .\server-database\world_zero\
+                }
                 try {
                     if (player != null) {
                         ship = (SegmentController) player.getFirstControlledTransformableWOExc(); //get ship
                         if (ship != null) {
                             ModPlayground.broadcastMessage("adding to cargo");
                             if (e.getMessage().text.equals("book")) {
-                                instance.ChatDebug("received command");
-                                Inventory inv = GetRndInv(ship); //get inventory of segment controller
-                                if (inv == null) {
-                                    instance.ChatDebug("inventory is null");
-                                }
-                                instance.ChatDebug("gotten inv: capacity " + inv.getCapacity());
-                                //get free inventory slot
-                                int index = inv.getFreeSlot();
-                                instance.ChatDebug("free slot of inventory is : " + index);
-                                //add logbook
-                                AddLogbook(inv, index);
-                                inv.clientUpdate();
-                                instance.ChatDebug("added loogbook");
-                                inv.sendAll();
-                                instance.ChatDebug("sent all");
+                                AddLore(ship,null);
                             }
                         }
                     }
@@ -136,6 +130,34 @@ public class DerelictController {
 
             }
         });
+
+    }
+    private void AddLore(SegmentController ship, Inventory inv) {
+        try {
+            if (inv == null) {
+                inv = GetRndInv(ship); //get random inventory of segment controller
+            }
+            if (inv == null) {
+                instance.ChatDebug("inventory is null");
+                return;
+            }
+            instance.ChatDebug("gotten inv: capacity " + inv.getCapacity());
+            //get free inventory slot
+            int index = inv.getFreeSlot();
+            instance.ChatDebug("free slot of inventory is : " + index);
+            //add logbook
+            int faction = ship.getFactionId();
+            instance.ChatDebug("faction ID is " + faction);
+            AddLogbook(inv, index, faction); //chooses a lore text fitting for the given faction and creates a logbook with it. adds to inventory
+            inv.clientUpdate();
+            instance.ChatDebug("added logbook");
+            inv.sendAll();
+            instance.ChatDebug("sent all");
+        }catch (Exception e) {
+            e.printStackTrace();
+            instance.ChatDebug(e.toString());
+        }
+
 
     }
     private HashMap<Integer, Integer> GetLoot(HashMap<Integer,Integer> loottable, int amount, int slots) {
@@ -161,7 +183,10 @@ public class DerelictController {
         int totalItems = lootAmount;
         instance.ChatDebug(" total items before filling: " + totalItems);
         for (Inventory inv: list) { //foreach inventory, create loot and fill it
-            HashMap<Integer,Integer> loot = GetLoot(derelictLoot, 100,20); //basic loot, low amount + slots, just to keep chests not empty and interesting
+            AddLore(sc,inv); //TODO remove add lore to every inv for final builds
+
+            int baseSlots = (int) (Math.random() * 5);
+            HashMap<Integer,Integer> loot = GetLoot(derelictLoot, 100,baseSlots); //basic loot, low amount + slots, just to keep chests not empty and interesting
             float lootVol = 0;
             float lootSetItems = 0;
             for (Map.Entry me: loot.entrySet()) { //foreach item type, add to cargo
@@ -216,18 +241,18 @@ public class DerelictController {
 
         instance.ChatDebug("total capacity is " + totalCap);
     }
-    private void AddLogbook(Inventory inv, int mapidx) {
+    private void AddLogbook(Inventory inv, int mapidx, int factionID) {
         /**
          *  creates a MetaObject logbook and puts it at specified index of the inventorymap into the specified inventory.
          */
         try {
+            lh.ReadFile(); //read file again in case of change TODO disable for final build.
             instance.ChatDebug("trying to create new logbook with ID");
-            //get metaobjectmanager
             Logbook lb = (Logbook) MetaObjectManager.instantiate(MetaObjectManager.MetaObjectType.LOG_BOOK,(short) 1,true); //var0 = type, var1 = weapon subtype (ignored if not weapon), var2 bool true => generate new ID automatically.
-          // int id = 123456789;
-          //  Logbook lb = new Logbook(id);
             instance.ChatDebug("new logbook has ID: " + lb.getId());
-            lb.setTxt(Logbook.getRandomEntry(GameServer.getServerState())); //set random text from file
+
+            //TODO entity type check/pass into lorehandler
+            lb.setTxt(lh.GetLoreText(factionID)); //set random text from file
             inv.put(mapidx,lb); //put logbook into inventory at slot !!overwrites existing slots
 
             instance.ChatDebug("put logbook into inv");

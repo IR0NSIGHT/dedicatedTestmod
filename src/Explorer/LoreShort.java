@@ -16,8 +16,8 @@ import java.util.List;
  */
 public class LoreShort {
     private String text = "";
-    private List<Integer> factionIDList = new ArrayList<>(); //for which faction the text can appear
-    private List<Integer> entityTypeList = new ArrayList<>();; //ship, station, etc
+    public List<Integer> factionIDList = new ArrayList<>(); //for which faction the text can appear
+    public List<Integer> entityTypeList = new ArrayList<>();; //ship, station, etc
 
     public LoreShort(String text, int faction, int type) {
         this.text = text;
@@ -35,6 +35,9 @@ public class LoreShort {
     };
     public void setText(String text) {
         this.text = text;
+    }
+    public String getText() {
+        return this.text;
     }
     public void addFactionID(int ID) { //add new faction ID if not already present
         if (FindAt(factionIDList,ID) == -1) {

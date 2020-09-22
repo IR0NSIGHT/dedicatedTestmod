@@ -58,7 +58,9 @@ public class EntityLoadEventLoop{
                     for (int i = 0; i < newEnts.size(); i++) {
                         EntityLoadedEvent event = new EntityLoadedEvent( newEnts.get(i).getUID(),newEnts.get(i).getInternalEntity() );
                         StarLoader.fireEvent(EntityLoadedEvent.class, event, true);
-                        chatDebug("new segement controller was loaded.");
+                        SegmentController sc = newEnts.get(i).getInternalEntity();
+                        int fID = sc.getFactionId();
+                        chatDebug("new sc loaded: " + sc.getName() + " faction: " + fID);
                     }
 
                     for (int i = 0; i < oldLoadedEnts.size(); i++) {
