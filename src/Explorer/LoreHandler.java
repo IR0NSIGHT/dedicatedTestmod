@@ -18,21 +18,44 @@ import java.util.Random;
  * DATE: 16.09.2020
  * TIME: 13:29
  */
+/**
+ *  this class reads the lore config files and turns them into LoreShort class instances
+ *  it saves all of these instances to a list
+ *  it can be called from outside, takes in specifications for the type of lore you want and returns the fitting loreshort
+ *  every time a new loreshort is requested, the config file is read again: allows for chaning of config during runtime.
+ */
 public class LoreHandler {
     /**
-     *  this class reads the lore config files and turns them into LoreShort class instances
-     *  it saves all of these instances to a list
-     *  it can be called from outside, takes in specifications for the type of lore you want and returns the fitting loreshort
+     * reference to the main class of the mod, used for writing to debug file
      */
     private final Mod instance;
+    /**
+     * stores the LoreShorts. Filled by ReadFile() from config file
+     */
     public List<LoreShort> loreList = new ArrayList<>();
+    /**
+     * default String that is used when no matching LoreShort is found for the required entity.
+     */
     public String defaultLore = " AUTOMATED SYSTEM LOG /n -- ALL SYSTEMS OFFLINE --";
+    /**
+     * path to in-install config file.
+     */
     String path = "lore.json";
+
+    /**
+     * constructor
+     * initializes Reading of config
+     * @param instance
+     */
     public LoreHandler(Mod instance) {
         this.instance = instance;
         instance.ChatDebug("created LoreHandler");
         ReadFile();
     }
+
+    /**
+     * Safety counter for creating new configfile.
+     */
     private int i = 0;
 
     /**
@@ -119,9 +142,18 @@ public class LoreHandler {
         }
 
     }
+
+    /**
+     * Debug method, not used in built code.
+     * @param args
+     */
     public static void main(String[] args){
         String text = "hello world";
     }
+
+    /**
+     * Empty method
+     */
     public void WriteFile() {
         //copy the hardcoded default textfile into the starmade install folder as the new configfile
    /*     InputStream is = null;
@@ -165,6 +197,12 @@ public class LoreHandler {
         instance.ChatDebug("random loreshort from list was created.");
         return randLS.getText();
     }
+
+    /**
+     * GetLoreText Overload that will use any entityType and only takes a faction ID
+     * @param factionID
+     * @return
+     */
     public String GetLoreText(int factionID) {
        String text = GetLoreText(factionID, -1);
        return text;

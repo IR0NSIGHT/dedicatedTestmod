@@ -26,7 +26,6 @@ import org.schema.game.server.data.GameServerState;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 /**
  * STARMADE MOD
@@ -34,25 +33,38 @@ import java.util.Random;
  * DATE: 05.09.2020
  * TIME: 14:54
  */
+/**
+ * this class handles the SegmentController loaded event and checks if it is a derelict station.
+ * if so, it fills loot into the stations cargo holds
+ */
 public class DerelictController {
     /**
-     * this class handles the SegmentController loaded event and checks if it is a derelict station.
-     * if so, it fills loot into the stations cargo holds
+     * reference to main mod class, used for writing to debug file
      */
     private final Mod instance;
     private final LootController lc;
-    private final ConfigReader cr;
+    private final LootConfigReader cr;
     private final LoreHandler lh;
+    /**
+     * HashMap that maps ItemID to item weight. (direct copy of config file)
+     */
     private HashMap<Integer,Integer> derelictLoot;
+    /**
+     * number of items put into a new derelict station.
+     */
     private int lootAmount = 5000;
 
+    /**
+     * Constructor
+     * Creates 2 Eventhandlers:
+     * new entity spawned
+     * chatevent (for debug purposes)
+     * @param instance reference to mods main class for debug logging
+     */
     public DerelictController(final Mod instance) {
-        /**
-         *  constructor
-         */
         this.instance = instance;
         lc = new LootController(instance);
-        cr = new ConfigReader(instance);
+        cr = new LootConfigReader(instance);
         derelictLoot = cr.ReadConfig();
         lh = new LoreHandler(instance);
 
@@ -132,6 +144,13 @@ public class DerelictController {
         });
 
     }
+
+    /**
+     * Adds a logbook to the specified inventory of the ship. Selects fitting lore text based on ship faction
+     * @param ship
+     * @param inv
+     */
+    //TODO add check for entity type
     private void AddLore(SegmentController ship, Inventory inv) {
         try {
             if (inv == null) {
@@ -157,12 +176,23 @@ public class DerelictController {
             e.printStackTrace();
             instance.ChatDebug(e.toString());
         }
-
-
     }
+
+    /**
+     * returns loot map
+     * @param loottable
+     * @param amount
+     * @param slots
+     * @return
+     */
     private HashMap<Integer, Integer> GetLoot(HashMap<Integer,Integer> loottable, int amount, int slots) {
         return lc.GetLoot(loottable,amount,slots);
     }
+
+    /**
+     *  i dont remeber what it does exactly. it puts loot into all inventories of the ship
+     * @param sc
+     */
     private void FillEntityLoot (SegmentController sc) {
         //foreach cargo module do loot
         if (sc.getType() != SimpleTransformableSendableObject.EntityType.SHIP && sc.getType() != SimpleTransformableSendableObject.EntityType.SPACE_STATION) {
@@ -241,10 +271,16 @@ public class DerelictController {
 
         instance.ChatDebug("total capacity is " + totalCap);
     }
+    /**
+     * creates a MetaObject logbook and puts it at specified index of the inventorymap into the specified inventory.
+     * @param inv Inventory which the logbook gets put into
+     * @param mapidx Inventory slot index
+     * @param factionID faction ID for which fitting lore is used
+     */
+    //TODO add check for entity type
+    //TODO move "getlore" out of method, use input string instead
     private void AddLogbook(Inventory inv, int mapidx, int factionID) {
-        /**
-         *  creates a MetaObject logbook and puts it at specified index of the inventorymap into the specified inventory.
-         */
+
         try {
             lh.ReadFile(); //read file again in case of change TODO disable for final build.
             instance.ChatDebug("trying to create new logbook with ID");
@@ -262,6 +298,13 @@ public class DerelictController {
         }
         ModPlayground.broadcastMessage("done creating logbook");
     }
+
+    /**
+     * selects a random inventory of the SegmentController. returns null if none are available
+     * @param sc SegmentController
+     * @return
+     */
+    //TODO check for free space in inv
     private Inventory GetRndInv(SegmentController sc) {
         instance.ChatDebug("trying to getrandom entities cargo: " + sc.getName());
         try {
@@ -286,6 +329,12 @@ public class DerelictController {
         }
         return null;
     }
+
+    /**
+     * change number of items for lootcreation
+     * called through chatevent
+     * cycles through 5k, 15k, 45k
+     */
     private void DebugLootAmount() {
         //cycle through 5k, 15k, 45k
         int old = lootAmount;
@@ -296,6 +345,15 @@ public class DerelictController {
         instance.ChatDebug("set loot amount from " + old + " to " + lootAmount);
         ModPlayground.broadcastMessage("loot item number set to " + lootAmount);
     }
+
+    /**
+     * Deprecated method
+     * Adds specified items to biggest inventory of segmentcontroller
+     * @param sc
+     * @param blockID
+     * @param blockAmount
+     * @return
+     */
     public boolean addToEntitiesCargo(SegmentController sc, short blockID, int blockAmount) {
         instance.ChatDebug("trying to add to entities cargo: " + sc.getName());
         try {
@@ -342,6 +400,12 @@ public class DerelictController {
             return false;
         }
     }
+
+    /**
+     * Debug method
+     * Will log every single stellar system of spawn galaxy with coordinates + name to debug file
+     * @return
+     */
     public boolean WriteAllSystems() {
         boolean success = false;
         try {
@@ -370,6 +434,11 @@ public class DerelictController {
         }
         return success;
     }
+
+    /**
+     * Reads lootitem configfile
+     */
+    //TODO call directly
     public void ReadConfig() {
         instance.ChatDebug("trying to call ReadConfig of configreader");
         cr.ReadConfig();
