@@ -13,18 +13,33 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * a loop detecting newly loaded segment controllers
+ * stores all currently loaded entities and on the next check compares if new ones were added or old ones unloaded.
+ * Fires according eventy: EntityLoadedEvent + EntityUnloadedEvent
+ */
+//TODO will fire Events.EntityUnloadedEvent
 public class EntityLoadEventLoop{
-    /*
-       create a loop checking for newly loaded entities
-       fires Events.EntityLoadedEvent
-       TODO will fire Events.EntityUnloadedEvent
+    /**
+     * reference to mod instance for debug logging
      */
     private Mod modInstance;
+
+    /**
+     * constructor
+     * Starts checkloop
+     * @param modinstance reference to main mod for debug logging
+     */
     public EntityLoadEventLoop(Mod modinstance){
         this.modInstance = modinstance;
         SegmentControllerCheckLoop();
     }
 
+    /**
+     * creates a starrunnable that runs once a second
+     * Logs entities to a list (oldLoadedEnts)
+     * compares to newLoadedEnts
+     */
     private void SegmentControllerCheckLoop() {
         new StarRunnable() {
             private ArrayList<EntityWrapper> oldLoadedEnts;
@@ -82,6 +97,13 @@ public class EntityLoadEventLoop{
                 }
                 //chatDebug("loop completed");
             }
+
+            /**
+             * Check given List for this UID.
+             * @param newLoadedEnts
+             * @param UID
+             * @return true if in list, false if not.
+             */
             private boolean IsInList(ArrayList<EntityWrapper> newLoadedEnts, String UID) {
                 for (int j = 0; j < newLoadedEnts.size(); j++) {
                     //compare UIDs
@@ -94,6 +116,11 @@ public class EntityLoadEventLoop{
                 //looped through complete newLoadedEnts, didnt find a match, entity is not in newLoadedEnts
                 return false;
             }
+
+            /**
+             * get all currently loaded segmentcontrollers in a EntityWrapper list
+             * @return Arraylist with all loaded segmentcontrollers as EntityWrapper objects
+             */
             private ArrayList<EntityWrapper> getoldLoadedEnts() {
                 ArrayList<EntityWrapper> newLoadedEnts = new ArrayList<>();
                 for (SegmentController sc: GameServer.getServerState().getSegmentControllersByName().values()) {
@@ -108,6 +135,11 @@ public class EntityLoadEventLoop{
         }.runTimer(25);
     }
 
+    /**
+     * Debug method for logging a string to the starloader debug file
+     * Adds a timestamp and modorigin to log
+     * @param s String to log
+     */
     public void chatDebug(String s) {
         if (true) {
             SimpleDateFormat formatter = new SimpleDateFormat ("dd-MM-yyyy 'at' HH:mm:ss z");

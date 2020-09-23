@@ -16,27 +16,31 @@ import java.util.Date;
  * DATE: 04.09.2020
  * TIME: 17:24
  */
+/**
+ * Detects once the server or client has finished loading. Will initialize rest of mod after that
+ * Can detect if mod is client or serverside (or local SP).
+ * this class contains 2 loops
+ * start loop runs until it detects either a server or a client state.
+ * second loop will only run for a server state
+ * second loop will start the entity load event loop which checks all entities existing and fires the events when they are loaded and unloaded
+ */
 public class ServerCheck {
-    /**
-     * this class contains 2 loops
-     * start loop runs until it detects either a server or a client state.
-     * second loop will only run for a server state
-     * second loop will start the entity load event loop which checks all entities existing and fires the events when they are loaded and unloaded
-     */
+
     private final Mod instance;
     private EntityLoadEventLoop eventLoop;
 
     public ServerCheck(Mod instance) {
         this.instance = instance;
         instance.ChatDebug("server check loop created");
-        //DebugNow();
         StartLoop();
     }
 
 
-
+    /**
+     * loop that detects if the serverstate was created. will start second loop if server or abort if client
+     */
     private void StartLoop() {
-
+        //TODO check if runs for local SP
         new StarRunnable() {
             boolean stop = false;
             @Override

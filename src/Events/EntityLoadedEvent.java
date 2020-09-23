@@ -2,16 +2,15 @@ package Events;
 
 import api.listener.events.Event;
 import org.schema.game.common.controller.SegmentController;
-
+/**
+ *  Eventclass for new loaded segment controllers.
+ fired from EntityLoadEventload whenever a new segment controller is detected.
+ loop runs once a second: event is not instant
+ Only has getter methods, can not be used to directly modify something.
+ */
 public class EntityLoadedEvent extends Event{
-        /**
-         *  Eventclass for new loaded segment controllers.
-            fired from EntityLoadEventload whenever a new segment controller is detected.
-            loop runs once a second: event is not instant
-            Only has getter methods, can not be used to directly modify something.
-        */
-        private final String entityUID;
-        private final SegmentController entitySegmentController;
+   private final String entityUID;
+   private final SegmentController entitySegmentController;
 
     /**
      * Constructor
@@ -24,10 +23,20 @@ public class EntityLoadedEvent extends Event{
             this.entityUID = UID;
             //ModPlayground.broadcastMessage("entity loaded event fired for " + this.entityUID);
         }
-        public String getEntityUID() {
+
+    /**
+     * Get the new entities UID
+     * @return entities UID string
+     */
+    public String getEntityUID() {
             return this.entityUID;
         }
-        public SegmentController getSegmentController() {
+
+    /**
+     * Get the new entities segment controller
+     * @return new entites segment controller
+     */
+    public SegmentController getSegmentController() {
             return this.entitySegmentController;
         }
 

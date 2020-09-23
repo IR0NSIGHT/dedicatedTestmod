@@ -190,9 +190,16 @@ public class DerelictController {
     }
 
     /**
-     *  i dont remeber what it does exactly. it puts loot into all inventories of the ship
+     * fills every inventory in the ship with basic loot (100 items, ~5 slots), independent from mainloot itemnumber.
+     * fills every inventory in the ship with a logbook with random loretext
+     * the inventory list is shuffeled.
+     * each inventory gets its own distribution for loot: "lootset"
+     * this is used for basic loot and main loot
+     * the method calculates how many lootsets fit into the inventory
+     * the inventory is then filled to the brim with multiple lootsets until the total number of loot is zero, or no more inventory space is left.
      * @param sc
      */
+    //TODO split up into sub methods of basic loot, actual loot, logbook
     private void FillEntityLoot (SegmentController sc) {
         //foreach cargo module do loot
         if (sc.getType() != SimpleTransformableSendableObject.EntityType.SHIP && sc.getType() != SimpleTransformableSendableObject.EntityType.SPACE_STATION) {
@@ -217,6 +224,7 @@ public class DerelictController {
 
             int baseSlots = (int) (Math.random() * 5);
             HashMap<Integer,Integer> loot = GetLoot(derelictLoot, 100,baseSlots); //basic loot, low amount + slots, just to keep chests not empty and interesting
+            //TODO get smallest common denominator to get smallest possible size of lootset
             float lootVol = 0;
             float lootSetItems = 0;
             for (Map.Entry me: loot.entrySet()) { //foreach item type, add to cargo
@@ -255,6 +263,7 @@ public class DerelictController {
             for (Map.Entry me: loot.entrySet()) {
                 short ID = (short)((int) me.getKey());
                 int amount = (((int) me.getValue()) * setAmount);
+                //TODO caninputhowmuch -> fill instead of skip
                 if (inv.canPutIn(ID,amount)) {
                     int sendThisNumber = inv.incExistingOrNextFreeSlot(ID,amount); // seems to be always zero
                     inv.sendInventoryModification(sendThisNumber); //what does this method exactly do? maybe input var int is a "countdown in seconds"?, might be slot array pos?
@@ -263,9 +272,7 @@ public class DerelictController {
                 } else {
                     instance.ChatDebug("cant add " + ID + "x" + amount + " to inventory.");
                 }
-
             }
-
             totalCap += inv.getCapacity();
         }
 
@@ -349,10 +356,10 @@ public class DerelictController {
     /**
      * Deprecated method
      * Adds specified items to biggest inventory of segmentcontroller
-     * @param sc
-     * @param blockID
-     * @param blockAmount
-     * @return
+     * @param sc segmentcontroller
+     * @param blockID blockID
+     * @param blockAmount number of blocks
+     * @return true if was able to add blocks, false if not.
      */
     public boolean addToEntitiesCargo(SegmentController sc, short blockID, int blockAmount) {
         instance.ChatDebug("trying to add to entities cargo: " + sc.getName());
@@ -383,6 +390,7 @@ public class DerelictController {
                         biggestInv = inv;   //set this inventory as new biggest inventory
                     }
                 }
+                //TODO check canputin
                 int sendThisNumber = inv.incExistingOrNextFreeSlot(blockID,blockAmount); // seems to be always zero
                 inv.sendInventoryModification(sendThisNumber); //what does this method exactly do? maybe input var int is a "countdown in seconds"?
             }
